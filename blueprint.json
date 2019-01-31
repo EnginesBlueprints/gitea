@@ -15,12 +15,67 @@
         "level": "alpha",
         "patch": 0
       }
-    }
+    },
+    "timestamp": "2019-01-31T17:39:55+11:00"
   },
   "software": {
     "base": {
+      "name": "gitea",
+      "framework": "base_c",
       "deployment_type": "web",
       "http_protocol": "https_and_http"
-    }
+    },
+    "scripts": {
+      "start": {
+        "language": "sh",
+        "content": "sleep 500"
+      }
+    },
+    "system_packages": [
+      {
+        "package": "git"
+      }
+    ],
+    "installed_packages": [
+      {
+        "name": "gitea",
+        "download_type": "http(s)",
+        "source_url": "https://dl.gitea.io/gitea/1.7.0/gitea-1.7.0-linux-amd64",
+        "destination": "/home/app",
+        "path_to_extracted": "gitea"
+      }
+    ],
+    "service_configurations": [
+      {
+        "publisher_namespace": "EnginesSystem",
+        "type_path": "filesystem/local/filesystem",
+        "variables": {
+          "service_name": "_Engines_Builder(engine_name)",
+          "volume_src": null,
+          "engine_path": null,
+          "permissions": "rw",
+          "user": "_Engines_Builder(data_uid)",
+          "group": "_Engines_Builder(data_gid)"
+        }
+      },
+      {
+        "publisher_namespace": "EnginesSystem",
+        "type_path": "database/sql/mysql",
+        "variables": {
+          "database_name": "_Engines_Builder(engine_name)",
+          "database_host": "_Engines_System(mysql_host)",
+          "db_username": "_Engines_Builder(engine_name)",
+          "db_password": "_Engines_System(random(10))",
+          "collation": "utf8_general_ci",
+          "full_access": "false"
+        }
+      }
+    ],
+    "template_files": [
+      {
+        "path": "/home/app/gitea.conf",
+        "content": ";\r\nRUN_USER = www-data\r\n\r\nROOT = /home/fs/repo\r\n\r\n;server\r\n[server]\r\nDOMAIN _Engines_Environment(fqdn)\r\nROOT_URL https://_Engines_Environment(fqdn)/\r\n\r\n;database\r\n[database]\r\nDB_TYPE = mysql\r\nHOST = _Engines_Environment(dbhost)\r\nNAME = _Engines_Environment(dbname)\r\nUSER = _Engines_Environment(dbuser)\r\nPASSWD = _Engines_Environment(dbpasswd)\r\n\r\n;Security\r\n[security]\r\nSECRET_KEY = _Engines_System(random(16))\r\n\r\nENABLE_CAPTCHA = true\r\n\r\n;mailer\r\n[mailer]\r\nENABLED = true\r\nHOST = smtp.engines.internal\r\nFROM = gitea@_Engines_Environment(fqdn)\r\n\r\n\r\n;log\r\n[log]\r\nROOT_PATH = /var/log\r\n\r\n\r\n\r\n[cron]\r\n; Enable running cron tasks periodically handled by cron service\r\nENABLED = false\r\n\r\n\r\n\r\n"
+      }
+    ]
   }
 }
