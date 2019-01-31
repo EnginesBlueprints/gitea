@@ -16,7 +16,7 @@
         "patch": 0
       }
     },
-    "timestamp": "2019-01-31T17:39:55+11:00"
+    "timestamp": "2019-01-31T17:49:40+11:00"
   },
   "software": {
     "base": {
@@ -51,8 +51,8 @@
         "type_path": "filesystem/local/filesystem",
         "variables": {
           "service_name": "_Engines_Builder(engine_name)",
-          "volume_src": null,
-          "engine_path": null,
+          "volume_src": "",
+          "engine_path": "/home/fs/repo",
           "permissions": "rw",
           "user": "_Engines_Builder(data_uid)",
           "group": "_Engines_Builder(data_gid)"
