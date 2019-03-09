@@ -16,7 +16,7 @@
         "patch": 0
       }
     },
-    "timestamp": "2019-03-09T16:07:06+11:00"
+    "timestamp": "2019-03-09T16:51:06+11:00"
   },
   "software": {
     "base": {
@@ -96,6 +96,12 @@
       {
         "path": "/home/app/custom/conf/app.ini",
         "content": ";\r\nAPP_NAME = Gitea: Git with a cup of tea\r\nRUN_USER = www-data\r\nRUN_MODE = prod\r\n\r\n\r\n[repository]\r\nROOT = /home/fs/repo/gitea-repositories\r\n\r\n[server]\r\n\r\nSSH_DOMAIN       = _Engines_Builder(fqdn)\r\nDOMAIN           = _Engines_Builder(fqdn)\r\nHTTP_PORT        = 3000\r\nDISABLE_SSH      = false\r\nSSH_PORT         = 22\r\nLFS_START_SERVER = true\r\nLFS_CONTENT_PATH = /home/fs/repo/data/lfs\r\nLFS_JWT_SECRET   = _Engines_System(random(32))\r\nOFFLINE_MODE     = false\r\nROOT_URL = https://_Engines_Builder(fqdn)/\r\n\r\n;database\r\n[database]\r\nDB_TYPE = mysql\r\nHOST = _Engines_Environment(dbhost):3306\r\nNAME = _Engines_Environment(dbname)\r\nUSER = _Engines_Environment(dbuser)\r\nPASSWD = _Engines_Environment(dbpasswd)\r\nSSL_MODE = disable\r\n\r\n;Security\r\n[security]\r\nSECRET_KEY = _Engines_System(random(32))\r\nINTERNAL_TOKEN = _Engines_System(random(30))\r\n\r\n\r\n;mailer\r\n[mailer]\r\nENABLED = true\r\nHOST = smtp.engines.internal\r\nFROM = <gitea@_Engines_Builder(fqdn)>\r\nPORT = 25\r\n\r\n\r\n;log\r\n[log]\r\nROOT_PATH = /var/log\r\nMODE      = file\r\nLEVEL     = Info\r\n\r\n\r\n[cron]\r\n; Enable running cron tasks periodically handled by cron service\r\nENABLED = false\r\n\r\n[service]\r\nREGISTER_EMAIL_CONFIRM            = true\r\nENABLE_NOTIFY_MAIL                = false\r\nDISABLE_REGISTRATION              = true\r\nALLOW_ONLY_EXTERNAL_REGISTRATION  = false\r\nENABLE_CAPTCHA                    = false\r\nREQUIRE_SIGNIN_VIEW               = false\r\nDEFAULT_KEEP_EMAIL_PRIVATE        = false\r\nDEFAULT_ALLOW_CREATE_ORGANIZATION = true\r\nDEFAULT_ENABLE_TIMETRACKING       = true\r\nNO_REPLY_ADDRESS                  = <noreply@_Engines_Builder(fqdn)>\r\n\r\n"
+      }
+    ],
+    "file_write_permissions": [
+      {
+        "path": "data",
+        "recursive": true
       }
     ],
     "persistent_directories": [
