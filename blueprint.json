@@ -16,19 +16,20 @@
         "patch": 0
       }
     },
-    "timestamp": "2019-01-31T18:40:28+11:00"
+    "timestamp": "2019-03-09T14:57:54+11:00"
   },
   "software": {
     "base": {
       "name": "gitea",
       "framework": "base_c",
       "deployment_type": "web",
-      "http_protocol": "https_and_http"
+      "http_protocol": "https_only",
+      "framework_port_override": 4000
     },
     "scripts": {
       "start": {
         "language": "sh",
-        "content": "#!/bin/sh\r\ncd /home/app\r\n./gitea web\r\nsleep 500"
+        "content": "#!/bin/sh\r\nPID_FILE=/var/run/engines/gitea.pid\r\n\r\nexport PID_FILE\r\n\r\n. /home/engines/functions/trap.sh\r\n\r\ncd /home/app\r\n./gitea -P $PID_FILE web\r\nstartup_complete\r\nwait\r\nshutdown_complete"
       },
       "install": {
         "language": "sh",
@@ -78,7 +79,7 @@
     "template_files": [
       {
         "path": "/home/app/custom/conf/app.ini",
-        "content": ";\r\nAPP_NAME = Gitea: Git with a cup of tea\r\nRUN_USER = www-data\r\nRUN_MODE = prod\r\n\r\n\r\n[repository]\r\nROOT = /home/fs/repo/gitea-repositories\r\n\r\n[server]\r\n\r\nSSH_DOMAIN       = _Engines_Environment(fqdn)\r\nDOMAIN           = _Engines_Environment(fqdn)\r\nHTTP_PORT        = 3000\r\nDISABLE_SSH      = false\r\nSSH_PORT         = 22\r\nLFS_START_SERVER = true\r\nLFS_CONTENT_PATH = /home/fs/repo/data/lfs\r\nLFS_JWT_SECRET   = _Engines_System(random(64))\r\nOFFLINE_MODE     = false\r\nROOT_URL = https://_Engines_Environment(fqdn)/\r\n\r\n;database\r\n[database]\r\nDB_TYPE = mysql\r\nHOST = _Engines_Environment(dbhost):3306\r\nNAME = _Engines_Environment(dbname)\r\nUSER = _Engines_Environment(dbuser)\r\nPASSWD = _Engines_Environment(dbpasswd)\r\nSSL_MODE = disable\r\n\r\n;Security\r\n[security]\r\nSECRET_KEY = _Engines_System(random(32))\r\nINTERNAL_TOKEN = _Engines_System(random(64))\r\n\r\n\r\n;mailer\r\n[mailer]\r\nENABLED = true\r\nHOST = smtp.engines.internal\r\nFROM = gitea@_Engines_Environment(fqdn)\r\nPORT = 25\r\n\r\n\r\n;log\r\n[log]\r\nROOT_PATH = /var/log\r\nMODE      = file\r\nLEVEL     = Info\r\n\r\n\r\n[cron]\r\n; Enable running cron tasks periodically handled by cron service\r\nENABLED = false\r\n\r\n[service]\r\nREGISTER_EMAIL_CONFIRM            = true\r\nENABLE_NOTIFY_MAIL                = false\r\nDISABLE_REGISTRATION              = true\r\nALLOW_ONLY_EXTERNAL_REGISTRATION  = false\r\nENABLE_CAPTCHA                    = false\r\nREQUIRE_SIGNIN_VIEW               = false\r\nDEFAULT_KEEP_EMAIL_PRIVATE        = false\r\nDEFAULT_ALLOW_CREATE_ORGANIZATION = true\r\nDEFAULT_ENABLE_TIMETRACKING       = true\r\nNO_REPLY_ADDRESS                  = noreply@engines.org\r\n\r\n"
+        "content": ";\r\nAPP_NAME = Gitea: Git with a cup of tea\r\nRUN_USER = www-data\r\nRUN_MODE = prod\r\n\r\n\r\n[repository]\r\nROOT = /home/fs/repo/gitea-repositories\r\n\r\n[server]\r\n\r\nSSH_DOMAIN       = _Engines_Environment(fqdn)\r\nDOMAIN           = _Engines_Environment(fqdn)\r\nHTTP_PORT        = 3000\r\nDISABLE_SSH      = false\r\nSSH_PORT         = 22\r\nLFS_START_SERVER = true\r\nLFS_CONTENT_PATH = /home/fs/repo/data/lfs\r\nLFS_JWT_SECRET   = _Engines_System(random(32))\r\nOFFLINE_MODE     = false\r\nROOT_URL = https://_Engines_Environment(fqdn)/\r\n\r\n;database\r\n[database]\r\nDB_TYPE = mysql\r\nHOST = _Engines_Environment(dbhost):3306\r\nNAME = _Engines_Environment(dbname)\r\nUSER = _Engines_Environment(dbuser)\r\nPASSWD = _Engines_Environment(dbpasswd)\r\nSSL_MODE = disable\r\n\r\n;Security\r\n[security]\r\nSECRET_KEY = _Engines_System(random(32))\r\nINTERNAL_TOKEN = _Engines_System(random(30))\r\n\r\n\r\n;mailer\r\n[mailer]\r\nENABLED = true\r\nHOST = smtp.engines.internal\r\nFROM = <gitea@_Engines_Environment(fqdn)>\r\nPORT = 25\r\n\r\n\r\n;log\r\n[log]\r\nROOT_PATH = /var/log\r\nMODE      = file\r\nLEVEL     = Info\r\n\r\n\r\n[cron]\r\n; Enable running cron tasks periodically handled by cron service\r\nENABLED = false\r\n\r\n[service]\r\nREGISTER_EMAIL_CONFIRM            = true\r\nENABLE_NOTIFY_MAIL                = false\r\nDISABLE_REGISTRATION              = true\r\nALLOW_ONLY_EXTERNAL_REGISTRATION  = false\r\nENABLE_CAPTCHA                    = false\r\nREQUIRE_SIGNIN_VIEW               = false\r\nDEFAULT_KEEP_EMAIL_PRIVATE        = false\r\nDEFAULT_ALLOW_CREATE_ORGANIZATION = true\r\nDEFAULT_ENABLE_TIMETRACKING       = true\r\nNO_REPLY_ADDRESS                  = <noreply@_Engines_Environment>\r\n\r\n"
       }
     ]
   }
