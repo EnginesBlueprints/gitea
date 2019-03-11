@@ -16,7 +16,7 @@
         "patch": 0
       }
     },
-    "timestamp": "2019-03-11T14:34:38+11:00"
+    "timestamp": "2019-03-11T16:08:36+11:00"
   },
   "software": {
     "base": {
@@ -105,7 +105,7 @@
     "environment_variables": [
       {
         "name": "sudo_list",
-        "value": "/use/sbin/sshd",
+        "value": "/usr/sbin/sshd",
         "mandatory": true,
         "immutable": true,
         "build_time_only": true,
