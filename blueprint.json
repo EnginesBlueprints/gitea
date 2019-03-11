@@ -16,7 +16,7 @@
         "patch": 0
       }
     },
-    "timestamp": "2019-03-11T11:17:01+11:00"
+    "timestamp": "2019-03-11T14:34:38+11:00"
   },
   "software": {
     "base": {
@@ -99,6 +99,18 @@
           "permissions": "rw",
           "user": "_Engines_Builder(data_uid)",
           "group": "_Engines_Builder(data_gid)"
+        }
+      }
+    ],
+    "environment_variables": [
+      {
+        "name": "sudo_list",
+        "value": "/use/sbin/sshd",
+        "mandatory": true,
+        "immutable": true,
+        "build_time_only": true,
+        "input": {
+          "type": "text"
         }
       }
     ],
