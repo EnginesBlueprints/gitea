@@ -16,7 +16,7 @@
         "patch": 0
       }
     },
-    "timestamp": "2019-03-12T12:52:35+11:00"
+    "timestamp": "2019-03-12T13:09:31+11:00"
   },
   "software": {
     "base": {
@@ -40,7 +40,7 @@
     "scripts": {
       "start": {
         "language": "sh",
-        "content": "#!/bin/sh\r\nPID_FILE=/var/run/engines/gitea.pid\r\n\r\nexport PID_FILE\r\n\r\n. /home/engines/functions/trap.sh\r\n\r\ncd /home/app\r\n./gitea  web &\r\nif ! test -d /var/run/sshd\r\n then\r\n sudo mkdir /var/run/sshd\r\nfi  \r\nsudo chown www-data /home/home_dir/.ssh\r\nsudo usermod -d /home/home_dir www-data\r\nsudo usermod -s /bin/sh www-data\r\nsudo chmod u-w /home/home_dir/.ssh chmod og-w -R /home/home_dir/.ssh \r\nsudo /usr/sbin/sshd -E /var/log/sshd.log\r\necho $! > $PID_FILE\r\nstartup_complete\r\nwait\r\nshutdown_complete"
+        "content": "#!/bin/sh\r\nPID_FILE=/var/run/engines/gitea.pid\r\n\r\nexport PID_FILE\r\n\r\n. /home/engines/functions/trap.sh\r\n\r\ncd /home/app\r\n./gitea  web &\r\nif ! test -d /var/run/sshd\r\n then\r\n sudo mkdir /var/run/sshd\r\nfi  \r\nsudo chown www-data /home/home_dir/.ssh\r\nsudo usermod -d /home/home_dir www-data\r\nsudo usermod -s /bin/sh www-data\r\nsudo chmod go-w /home/home_dir/.ssh chmod og-w -R /home/home_dir/.ssh \r\nsudo /usr/sbin/sshd -E /var/log/sshd.log\r\necho $! > $PID_FILE\r\nstartup_complete\r\nwait\r\nshutdown_complete"
       },
       "install": {
         "language": "sh",
