@@ -16,7 +16,7 @@
         "patch": 0
       }
     },
-    "timestamp": "2019-03-11T17:12:12+11:00"
+    "timestamp": "2019-03-12T11:53:01+11:00"
   },
   "software": {
     "base": {
@@ -40,7 +40,7 @@
     "scripts": {
       "start": {
         "language": "sh",
-        "content": "#!/bin/sh\r\nPID_FILE=/var/run/engines/gitea.pid\r\n\r\nexport PID_FILE\r\n\r\n. /home/engines/functions/trap.sh\r\n\r\ncd /home/app\r\n./gitea  web\r\necho $! > $PID_FILE\r\nstartup_complete\r\nwait\r\nshutdown_complete"
+        "content": "#!/bin/sh\r\nPID_FILE=/var/run/engines/gitea.pid\r\n\r\nexport PID_FILE\r\n\r\n. /home/engines/functions/trap.sh\r\n\r\ncd /home/app\r\n./gitea  web &\r\nif test -d /var/run/sshd\r\n then\r\n sudo mkdir /var/run/sshd\r\nfi  \r\nsudo /usr/sbin/sshd -E /var/log/sshd.log\r\necho $! > $PID_FILE\r\nstartup_complete\r\nwait\r\nshutdown_complete"
       },
       "install": {
         "language": "sh",
@@ -105,7 +105,7 @@
     "environment_variables": [
       {
         "name": "sudo_list",
-        "value": "ALL",
+        "value": "/usr/sbin/sshd /bin/mkdir",
         "mandatory": true,
         "immutable": true,
         "build_time_only": true,
