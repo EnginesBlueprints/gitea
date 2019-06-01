@@ -16,7 +16,7 @@
         "patch": 0
       }
     },
-    "timestamp": "2019-04-25T15:42:07+10:00"
+    "timestamp": "2019-06-01T12:09:13+10:00"
   },
   "software": {
     "base": {
@@ -29,7 +29,8 @@
         "required": 256,
         "recommended": 384
       },
-      "installation_report": "\r\nLdap settings\r\nGoto site administrator top right pull down\r\nAuthentication Sources tab\r\nClick add authentication source\r\nAuthentication Type = LDAP (via BindDN)\r\nAuthentication Name = ldap\r\nSecurity Protocol = Unencrypted\r\nHOST = ldap.engines.internal\r\nPORT = 389\r\nADMIN_FILTER = (memberOf=CN=gitea_admins,ou=_Engines_Builder(engine_name),ou=Applications,ou=Groups,DC=engines,DC=internal)\r\nUsername = uid\r\nE-mail_attribute = Email\r\nBind_DN = _Engines_Environment(ldap_dn)\r\nBind Password = _Engines_Environment(ldap_password)\r\nUser_Search_Base = (ou=People,dc=engines,dc=internal\r\nUser_Filter = (&(objectClass=posixAccount)(uid=%s))\r\nUser_DN = uid=%s,ou=People,dc=engines,dc=internal\r\nUser_Filter = (&(objectClass=posixAccount)(uid=%s))\r\nGroup_Search_Base = ou=_Engines_Builder(engine_name),ou=Applications,ou=Groups,dc=engines,dc=internal\r\nGroup Name Filter= (|(cn=gitea_users)(cn=gitea_admins))\r\nPublic SSH Key Attribute = sshPublicKey"
+      "first_run_url": "https://gitea.current.engines.org/install",
+      "installation_report": "\r\nScroll down to Optional Settings\r\n click on Administrator Account Settings \r\n set admin account details note username admin is reserved\r\nclick install Gitea\r\n\r\n**Ldap settings** (optional)\r\nGoto site administrator top right pull down\r\nAuthentication Sources tab\r\nClick add authentication source\r\nAuthentication Type = LDAP (via BindDN)\r\nAuthentication Name = ldap\r\nSecurity Protocol = Unencrypted\r\nHOST = ldap.engines.internal\r\nPORT = 389\r\nADMIN_FILTER = (memberOf=CN=gitea_admins,ou=_Engines_Builder(engine_name),ou=Applications,ou=Groups,DC=engines,DC=internal)\r\nUsername = uid\r\nE-mail_attribute = Email\r\nBind_DN = _Engines_Environment(ldap_dn)\r\nBind Password = _Engines_Environment(ldap_password)\r\nUser_Search_Base = (ou=People,dc=engines,dc=internal\r\nUser_Filter = (&(objectClass=posixAccount)(uid=%s))\r\nUser_DN = uid=%s,ou=People,dc=engines,dc=internal\r\nUser_Filter = (&(objectClass=posixAccount)(uid=%s))\r\nGroup_Search_Base = ou=_Engines_Builder(engine_name),ou=Applications,ou=Groups,dc=engines,dc=internal\r\nGroup Name Filter= (|(cn=gitea_users)(cn=gitea_admins))\r\nPublic SSH Key Attribute = sshPublicKey"
     },
     "ports": [
       {
@@ -41,7 +42,7 @@
     "scripts": {
       "start": {
         "language": "sh",
-        "content": "#!/bin/sh\r\nPID_FILE=/var/run/engines/gitea.pid\r\n\r\nexport PID_FILE\r\n\r\n. /home/engines/functions/trap.sh\r\n\r\ncd /home/app\r\n./gitea  web &\r\necho -n $! > $PID_FILE\r\nif ! test -d /var/run/sshd\r\n then\r\n sudo mkdir /var/run/sshd\r\nfi  \r\nsudo chown www-data /home/home_dir/.ssh\r\nsudo usermod -d /home/home_dir www-data\r\nsudo usermod -s /bin/sh www-data\r\nsudo chmod go-w /home/home_dir/.ssh \r\nsudo chmod og-w -R /home/home_dir/.ssh \r\nsudo /usr/sbin/sshd -E /var/log/sshd.log\r\necho \" $! \" >> $PID_FILE\r\nstartup_complete\r\nwait\r\nshutdown_complete"
+        "content": "#!/bin/sh\r\nPID_FILE=/var/run/engines/gitea.pid\r\nPID_FILES=\"$PID_FILE /tmp/sleep.pid\"\r\nexport PID_FILES\r\n\r\n. /home/engines/functions/trap.sh\r\n\r\ncd /home/app\r\n./gitea  web &\r\necho -n $! > $PID_FILE\r\nif ! test -d /var/run/sshd\r\n then\r\n sudo mkdir /var/run/sshd\r\nfi  \r\nsudo chown www-data /home/home_dir/.ssh\r\nsudo usermod -d /home/home_dir www-data\r\nsudo usermod -s /bin/sh www-data\r\nsudo chmod go-w /home/home_dir/.ssh \r\nsudo chmod og-w -R /home/home_dir/.ssh \r\nsudo /usr/sbin/sshd -E /var/log/sshd.log\r\necho \" $! \" >> $PID_FILE\r\nstartup_complete\r\nwhile ! test -f /home/engines/run/flags/sig_term\r\n do\r\n  sleep 100 &\r\n  echo ! >/tmp/sleep.pid\r\n  wait\r\ndone\r\nshutdown_complete"
       },
       "install": {
         "language": "sh",
@@ -75,7 +76,8 @@
           "engine_path": "/home/fs/repo",
           "permissions": "rw",
           "user": "_Engines_Builder(data_uid)",
-          "group": "_Engines_Builder(data_gid)"
+          "group": "_Engines_Builder(data_gid)",
+          "fw_user": "_Engines_Builder(cont_user_id)"
         }
       },
       {
@@ -99,7 +101,8 @@
           "engine_path": "",
           "permissions": "rw",
           "user": "_Engines_Builder(data_uid)",
-          "group": "_Engines_Builder(data_gid)"
+          "group": "_Engines_Builder(data_gid)",
+          "fw_user": "_Engines_Builder(cont_user_id)"
         }
       },
       {
